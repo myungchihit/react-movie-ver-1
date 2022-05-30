@@ -3,12 +3,13 @@
     <body>
         <div id="root"></div>
     </body>
-    <script src="https://unpkg.com/react@17.0.2/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react@17.0.2/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@17.0.2/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://unpkg.com/prop-types@15.7.2/prop-types.js"></script>
     <script type="text/babel">
-        function Btn({ title , changeValue }){
-            console.log(title);
+        // js 문법 fontSize = 14 -> 14를 디폴트 value로 씀
+        function Btn({ title , changeValue , fontSize = 14 }){
             return <button 
             onClick={changeValue}
             style={{
@@ -17,17 +18,27 @@
                 padding: "10px 20px",
                 border: 0,
                 borderRadius: 10,
+                fontSize : fontSize,
             }}>{title}</button>
         }
         
         const MemorizedBtn = React.memo(Btn);
+        // propType을 지정
+        Btn.propTypes = {
+            text: PropTypes.string,
+            fontSize: PropTypes.Number,
+        }
         function App(){
             const [value, setValue] = React.useState("Save Changes");
             const changeValue = () => setValue("Revert Changes");
             return (
                 <div>
                     <MemorizedBtn title={value} changeValue={changeValue}/>
-                    <MemorizedBtn title="continue"/>
+                    <MemorizedBtn title="continue" fontSize={18} />
+                    { /* PropType을 걸었기 때문에 에러가 난다.
+                        <Btn text={14} fontSize={"Continue"} />
+                      */
+                    }
                 </div>
             );
         }
